@@ -9,11 +9,12 @@ export default class Sequence<T> implements ISerialiseable<Array<T>> {
   }
 
   Impart(value: Array<T>, buffer: BufferWriter): void {
-    buffer.Write(1, value.length ? 1 : 0);
-    for (let i = 0; i < value.length; i++) {
-      this.#structure.Impart(value[i], buffer);
-      buffer.Write(1, i < value.length - 1 ? 1 : 0);
+    for (const v of value) {
+      buffer.Write(1, 1);
+      this.#structure.Impart(v, buffer);
     }
+
+    buffer.Write(1, 0);
   }
 
   Accept(buffer: BufferReader): Array<T> {
@@ -24,6 +25,8 @@ export default class Sequence<T> implements ISerialiseable<Array<T>> {
   }
 
   Confirm(value: unknown): value is T[] {
-    return Array.isArray(value) && !value.find(this.#structure.Confirm);
+    return (
+      Array.isArray(value) && !value.find((v) => !this.#structure.Confirm(v))
+    );
   }
 }

@@ -32,7 +32,7 @@ export default class Struct<T extends Record<string, unknown>>
     return (
       typeof value === "object" &&
       !Object.keys(this.#structure).find((k) =>
-        this.#structure[k].Confirm((value as any)[k])
+        !this.#structure[k].Confirm((value as any)[k])
       )
     );
   }

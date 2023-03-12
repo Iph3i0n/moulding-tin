@@ -18,9 +18,31 @@ export { default as DateTime } from "./data-types/date-time.ts";
 export { default as Union } from "./data-types/union.ts";
 export { default as Intersection } from "./data-types/intersection.ts";
 export { default as Literal } from "./data-types/literal.ts";
+export { default as Record } from "./data-types/record.ts";
 export type { default as ISerialiseable } from "./data-types/base.ts";
-export { BufferReader, BufferWriter } from "./data-types/buffer-extra.ts";
 
+import { BufferReader, BufferWriter } from "./data-types/buffer-extra.ts";
 import type ISerialiseable from "./data-types/base.ts";
+import { Buffer } from "./deps.ts";
 
 export type Serialised<T> = T extends ISerialiseable<infer A> ? A : never;
+
+export function Write<TSchema>(
+  schema: ISerialiseable<TSchema>,
+  input: TSchema
+) {
+  const writer = new BufferWriter();
+
+  if (!schema.Confirm(input))
+    throw new Error("Attempting to serialise invalid type");
+
+  schema.Impart(input, writer);
+
+  return writer.Buffer;
+}
+
+export function Read<TSchema>(schema: ISerialiseable<TSchema>, buffer: Buffer) {
+  const reader = new BufferReader(buffer.bytes({ copy: true }));
+
+  return schema.Accept(reader);
+}

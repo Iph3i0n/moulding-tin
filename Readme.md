@@ -6,8 +6,8 @@ Simply:
 
 ```TypeScript
 import {
-  BufferReader,
-  BufferWriter,
+  Read,
+  Write,
   Struct,
   ASCII,
   Long,
@@ -20,16 +20,15 @@ const DataType = new Struct({
 });
 
 App.onGotData((data: Buffer) => {
-  const deserialised = DataType.Accept(new BufferReader(data));
+  const deserialised = Read(DataType, data);
 
   // Do something with your data
 });
 
 export function SendData(data: Serialised<T>) {
-  const writer = new BufferWriter();
-  DataType.Impart(data, writer);
+  const buffer = Write(DataType, data);
 
-  App.send(writer.Buffer);
+  // Do something with your buffer
 }
 ```
 
