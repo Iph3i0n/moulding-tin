@@ -19,6 +19,7 @@ export { default as Union } from "./data-types/union.ts";
 export { default as Intersection } from "./data-types/intersection.ts";
 export { default as Literal } from "./data-types/literal.ts";
 export { default as Record } from "./data-types/record.ts";
+export { default as Buffer } from "./data-types/buffer.ts";
 export type { default as ISerialiseable } from "./data-types/base.ts";
 
 import { BufferReader, BufferWriter } from "./data-types/buffer-extra.ts";
