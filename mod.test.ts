@@ -11,6 +11,7 @@ import {
   UTF8,
   UInt,
   Buffer as BufferSchema,
+  DateTime,
 } from "./mod.ts";
 import { assertEquals } from "https://deno.land/std@0.165.0/testing/asserts.ts";
 import { Buffer } from "./deps.ts";
@@ -62,4 +63,16 @@ Deno.test("Builds a buffer", () => {
 
   assertEquals([...result.data.bytes()], data_bytes);
   assertEquals(result.name, "Test Name");
+});
+
+Deno.test("Parses time", () => {
+  const schema = new Struct({
+    now: new DateTime(),
+  });
+
+  const now = new Date();
+
+  const result = Read(schema, Write(schema, { now }));
+
+  assertEquals(result.now.getTime(), now.getTime());
 });
