@@ -1,6 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
 import ISerialiseable, { IBufferReader, IBufferWriter } from "./base.ts";
-import { BufferWriter, BufferReader } from "./buffer-extra.ts";
 
 type Structured<TOptions extends any[]> = {
   [TKey in keyof TOptions]: ISerialiseable<TOptions[TKey]>;
