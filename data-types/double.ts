@@ -1,14 +1,13 @@
-import ISerialiseable from "./base.ts";
-import { BufferWriter, BufferReader } from "./buffer-extra.ts";
+import ISerialiseable, { IBufferReader, IBufferWriter } from "./base.ts";
 
 export default class Double implements ISerialiseable<number> {
-  Impart(value: number, buffer: BufferWriter): void {
+  Impart(value: number, buffer: IBufferWriter): void {
     const data = new ArrayBuffer(8);
     new DataView(data).setFloat64(0, value, false);
     for (const item of new Uint8Array(data)) buffer.Write(8, item);
   }
 
-  Accept(buffer: BufferReader): number {
+  Accept(buffer: IBufferReader): number {
     const data = new Uint8Array([
       buffer.Read(8),
       buffer.Read(8),

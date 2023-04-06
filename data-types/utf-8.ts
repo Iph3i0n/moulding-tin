@@ -1,14 +1,13 @@
-import ISerialiseable from "./base.ts";
-import { BufferWriter, BufferReader } from "./buffer-extra.ts";
+import ISerialiseable, { IBufferReader, IBufferWriter } from "./base.ts";
 
 export default class UTF8 implements ISerialiseable<string> {
-  Impart(value: string, buffer: BufferWriter): void {
+  Impart(value: string, buffer: IBufferWriter): void {
     for (const char of value) buffer.Write(32, char.charCodeAt(0));
 
     buffer.Write(32, 0x00);
   }
 
-  Accept(buffer: BufferReader): string {
+  Accept(buffer: IBufferReader): string {
     let result = "";
 
     while (!result.endsWith(String.fromCharCode(0x00)))

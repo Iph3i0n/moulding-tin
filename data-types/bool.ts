@@ -1,12 +1,11 @@
-import ISerialiseable from "./base.ts";
-import { BufferWriter, BufferReader } from "./buffer-extra.ts";
+import ISerialiseable, { IBufferReader, IBufferWriter } from "./base.ts";
 
 export default class Bool implements ISerialiseable<boolean> {
-  Impart(value: boolean, buffer: BufferWriter): void {
+  Impart(value: boolean, buffer: IBufferWriter): void {
     buffer.Write(1, value ? 1 : 0);
   }
 
-  Accept(buffer: BufferReader): boolean {
+  Accept(buffer: IBufferReader): boolean {
     return !!buffer.Read(1);
   }
 

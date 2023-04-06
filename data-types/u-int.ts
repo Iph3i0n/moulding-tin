@@ -1,12 +1,11 @@
-import ISerialiseable from "./base.ts";
-import { BufferWriter, BufferReader } from "./buffer-extra.ts";
+import ISerialiseable, { IBufferReader, IBufferWriter } from "./base.ts";
 
 export default class UInt implements ISerialiseable<number> {
-  Impart(value: number, buffer: BufferWriter): void {
+  Impart(value: number, buffer: IBufferWriter): void {
     buffer.Write(32, value);
   }
 
-  Accept(buffer: BufferReader): number {
+  Accept(buffer: IBufferReader): number {
     return buffer.Read(32);
   }
 

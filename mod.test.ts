@@ -14,7 +14,6 @@ import {
   DateTime,
 } from "./mod.ts";
 import { assertEquals } from "https://deno.land/std@0.165.0/testing/asserts.ts";
-import { Buffer } from "./deps.ts";
 
 function Perform<TSchema>(schema: ISerialiseable<TSchema>, input: TSchema) {
   return () => {
@@ -58,10 +57,13 @@ Deno.test("Builds a buffer", () => {
 
   const result = Read(
     schema,
-    Write(schema, { data: new Buffer(data_bytes), name: "Test Name" })
+    Write(schema, {
+      data: new Uint8Array(data_bytes),
+      name: "Test Name",
+    })
   );
 
-  assertEquals([...result.data.bytes()], data_bytes);
+  assertEquals([...new Uint8Array(result.data)], data_bytes);
   assertEquals(result.name, "Test Name");
 });
 

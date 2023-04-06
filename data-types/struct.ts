@@ -1,6 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import ISerialiseable from "./base.ts";
-import { BufferWriter, BufferReader } from "./buffer-extra.ts";
+import ISerialiseable, { IBufferReader, IBufferWriter } from "./base.ts";
 
 type Structured<T extends Record<string, unknown>> = {
   [TKey in keyof T]: ISerialiseable<T[TKey]>;
@@ -15,12 +14,12 @@ export default class Struct<T extends Record<string, unknown>>
     this.#structure = structure;
   }
 
-  Impart(value: T, buffer: BufferWriter): void {
+  Impart(value: T, buffer: IBufferWriter): void {
     for (const key in this.#structure)
       this.#structure[key].Impart(value[key], buffer);
   }
 
-  Accept(buffer: BufferReader): T {
+  Accept(buffer: IBufferReader): T {
     const result: any = {};
     for (const key in this.#structure)
       result[key] = this.#structure[key].Accept(buffer);
@@ -31,8 +30,8 @@ export default class Struct<T extends Record<string, unknown>>
   Confirm(value: unknown): value is T {
     return (
       typeof value === "object" &&
-      !Object.keys(this.#structure).find((k) =>
-        !this.#structure[k].Confirm((value as any)[k])
+      !Object.keys(this.#structure).find(
+        (k) => !this.#structure[k].Confirm((value as any)[k])
       )
     );
   }

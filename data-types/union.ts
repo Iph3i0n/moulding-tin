@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import ISerialiseable from "./base.ts";
+import ISerialiseable, { IBufferReader, IBufferWriter } from "./base.ts";
 import { BufferWriter, BufferReader } from "./buffer-extra.ts";
 
 type Structured<TOptions extends any[]> = {
@@ -15,7 +15,7 @@ export default class Union<TOptions extends any[]>
     this.#structure = structure;
   }
 
-  Impart(value: TOptions[number], buffer: BufferWriter): void {
+  Impart(value: TOptions[number], buffer: IBufferWriter): void {
     const match_index = this.#structure.findIndex((s) => s.Confirm(value));
     if (match_index === -1)
       throw new Error("No match found during union serialisation");
@@ -26,7 +26,7 @@ export default class Union<TOptions extends any[]>
     serialiser.Impart(value, buffer);
   }
 
-  Accept(buffer: BufferReader): TOptions[number] {
+  Accept(buffer: IBufferReader): TOptions[number] {
     const match_index = buffer.Read(4);
     const serialiser = this.#structure[match_index];
 

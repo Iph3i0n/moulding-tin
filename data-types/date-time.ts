@@ -1,8 +1,7 @@
-import ISerialiseable from "./base.ts";
-import { BufferWriter, BufferReader } from "./buffer-extra.ts";
+import ISerialiseable, { IBufferReader, IBufferWriter } from "./base.ts";
 
 export default class DateTime implements ISerialiseable<Date> {
-  Impart(value: Date, buffer: BufferWriter): void {
+  Impart(value: Date, buffer: IBufferWriter): void {
     buffer.Write(16, value.getFullYear());
     buffer.Write(5, value.getMonth());
     buffer.Write(5, value.getDate());
@@ -13,7 +12,7 @@ export default class DateTime implements ISerialiseable<Date> {
     buffer.Write(10, value.getMilliseconds());
   }
 
-  Accept(buffer: BufferReader): Date {
+  Accept(buffer: IBufferReader): Date {
     return new Date(
       buffer.Read(16),
       buffer.Read(5),

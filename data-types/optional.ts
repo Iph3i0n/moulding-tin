@@ -1,5 +1,4 @@
-import ISerialiseable from "./base.ts";
-import { BufferWriter, BufferReader } from "./buffer-extra.ts";
+import ISerialiseable, { IBufferReader, IBufferWriter } from "./base.ts";
 
 export default class Optional<T> implements ISerialiseable<T | null> {
   readonly #structure: ISerialiseable<T>;
@@ -8,7 +7,7 @@ export default class Optional<T> implements ISerialiseable<T | null> {
     this.#structure = structure;
   }
 
-  Impart(value: T | null, buffer: BufferWriter): void {
+  Impart(value: T | null, buffer: IBufferWriter): void {
     if (value === null) {
       buffer.Write(1, 0);
     } else {
@@ -17,7 +16,7 @@ export default class Optional<T> implements ISerialiseable<T | null> {
     }
   }
 
-  Accept(buffer: BufferReader): T | null {
+  Accept(buffer: IBufferReader): T | null {
     if (buffer.Read(1)) return this.#structure.Accept(buffer);
 
     return null;

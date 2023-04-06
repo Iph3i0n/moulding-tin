@@ -1,23 +1,21 @@
-import ISerialiseable from "./base.ts";
-import { BufferWriter, BufferReader } from "./buffer-extra.ts";
-import { Buffer } from "../deps.ts";
+import ISerialiseable, { IBufferReader, IBufferWriter } from "./base.ts";
 
-export default class IBuffer implements ISerialiseable<Buffer> {
-  Impart(value: Buffer, buffer: BufferWriter): void {
-    buffer.Write(32, value.length);
-    for (const byte of value.bytes({ copy: true })) buffer.Write(8, byte);
+export default class IBuffer implements ISerialiseable<ArrayBuffer> {
+  Impart(value: ArrayBuffer, buffer: IBufferWriter): void {
+    buffer.Write(32, value.byteLength);
+    for (const byte of new Uint8Array(value)) buffer.Write(8, byte);
   }
 
-  Accept(buffer: BufferReader): Buffer {
-    const result = new BufferWriter();
+  Accept(buffer: IBufferReader): ArrayBuffer {
     const length = buffer.Read(32);
+    const result: number[] = [];
 
-    for (let i = 0; i < length; i++) result.Write(8, buffer.Read(8));
+    for (let i = 0; i < length; i++) result.push(buffer.Read(8));
 
-    return result.Buffer;
+    return new Uint8Array(result);
   }
 
-  Confirm(value: unknown): value is Buffer {
-    return value instanceof Buffer;
+  Confirm(value: unknown): value is ArrayBuffer {
+    return ArrayBuffer.isView(value);
   }
 }

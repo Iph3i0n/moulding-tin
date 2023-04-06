@@ -1,10 +1,9 @@
-import ISerialiseable from "./base.ts";
-import { BufferWriter, BufferReader } from "./buffer-extra.ts";
+import ISerialiseable, { IBufferReader, IBufferWriter } from "./base.ts";
 
 export default class Empty implements ISerialiseable<never> {
-  Impart(_1: never, _2: BufferWriter): void {}
+  Impart(_1: never, _2: IBufferWriter): void {}
 
-  Accept(_: BufferReader): never {
+  Accept(_: IBufferReader): never {
     return undefined as never;
   }
 

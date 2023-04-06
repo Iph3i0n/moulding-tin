@@ -1,15 +1,14 @@
-import ISerialiseable from "./base.ts";
-import { BufferWriter, BufferReader } from "./buffer-extra.ts";
+import ISerialiseable, { IBufferReader, IBufferWriter } from "./base.ts";
 
 export default class ULong implements ISerialiseable<bigint> {
-  Impart(value: bigint, buffer: BufferWriter): void {
+  Impart(value: bigint, buffer: IBufferWriter): void {
     let binary_string = value.toString(2);
     while (binary_string.length < 64) binary_string = "0" + binary_string;
     for (let i = 0; i < 64; i++)
       buffer.Write(1, binary_string[i] === "1" ? 1 : 0);
   }
 
-  Accept(buffer: BufferReader): bigint {
+  Accept(buffer: IBufferReader): bigint {
     let data = "0b";
     for (let i = 0; i < 64; i++) data += buffer.Read(1).toString();
 

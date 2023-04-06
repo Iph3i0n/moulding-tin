@@ -1,5 +1,3 @@
-import { Buffer } from "../deps.ts";
-
 function* GetBits(data: Iterable<number>): Generator<number> {
   for (const byte of data) for (let i = 0; i < 8; i++) yield (byte >> i) & 1;
 }
@@ -7,8 +5,8 @@ function* GetBits(data: Iterable<number>): Generator<number> {
 export class BufferReader {
   #data: Generator<number>;
 
-  constructor(data: Iterable<number>) {
-    this.#data = GetBits(data);
+  constructor(data: ArrayBuffer) {
+    this.#data = GetBits(new Uint8Array(data));
   }
 
   get #next() {
@@ -59,6 +57,6 @@ export class BufferWriter {
       input.push(next);
     }
 
-    return new Buffer(new Uint8Array(input));
+    return new Uint8Array(input);
   }
 }

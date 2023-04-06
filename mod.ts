@@ -25,7 +25,6 @@ export type { default as ISerialiseable } from "./data-types/base.ts";
 
 import { BufferReader, BufferWriter } from "./data-types/buffer-extra.ts";
 import type ISerialiseable from "./data-types/base.ts";
-import { Buffer } from "./deps.ts";
 
 export type Serialised<T> = T extends ISerialiseable<infer A> ? A : never;
 
@@ -43,8 +42,11 @@ export function Write<TSchema>(
   return writer.Buffer;
 }
 
-export function Read<TSchema>(schema: ISerialiseable<TSchema>, buffer: Buffer) {
-  const reader = new BufferReader(buffer.bytes({ copy: true }));
+export function Read<TSchema>(
+  schema: ISerialiseable<TSchema>,
+  buffer: ArrayBuffer
+) {
+  const reader = new BufferReader(buffer);
 
   return schema.Accept(reader);
 }

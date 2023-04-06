@@ -1,6 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import ISerialiseable from "./base.ts";
-import { BufferWriter, BufferReader } from "./buffer-extra.ts";
+import ISerialiseable, { IBufferReader, IBufferWriter } from "./base.ts";
 
 type Structured<TOptions extends any[]> = {
   [TKey in keyof TOptions]: ISerialiseable<TOptions[TKey]>;
@@ -19,11 +18,11 @@ export default class Intersection<TOptions extends any[]>
     this.#structure = structure;
   }
 
-  Impart(value: UnionToIntersection<TOptions>, buffer: BufferWriter): void {
+  Impart(value: UnionToIntersection<TOptions>, buffer: IBufferWriter): void {
     for (const s of this.#structure) s.Impart(value, buffer);
   }
 
-  Accept(buffer: BufferReader): UnionToIntersection<TOptions> {
+  Accept(buffer: IBufferReader): UnionToIntersection<TOptions> {
     let result = {} as any;
 
     for (const s of this.#structure)

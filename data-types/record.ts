@@ -1,6 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import ISerialiseable from "./base.ts";
-import { BufferWriter, BufferReader } from "./buffer-extra.ts";
+import ISerialiseable, { IBufferReader, IBufferWriter } from "./base.ts";
 
 export default class Dictionary<TKey extends string | number, TValue>
   implements ISerialiseable<Record<TKey, TValue>>
@@ -13,7 +12,7 @@ export default class Dictionary<TKey extends string | number, TValue>
     this.#value = value;
   }
 
-  Impart(value: Record<TKey, TValue>, buffer: BufferWriter): void {
+  Impart(value: Record<TKey, TValue>, buffer: IBufferWriter): void {
     for (const key in value) {
       buffer.Write(1, 1);
       this.#key.Impart(key, buffer);
@@ -23,7 +22,7 @@ export default class Dictionary<TKey extends string | number, TValue>
     buffer.Write(1, 0);
   }
 
-  Accept(buffer: BufferReader): Record<TKey, TValue> {
+  Accept(buffer: IBufferReader): Record<TKey, TValue> {
     const result: any = {};
 
     while (buffer.Read(1)) {
