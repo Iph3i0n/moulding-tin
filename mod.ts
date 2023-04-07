@@ -50,3 +50,5 @@ export function Read<TSchema>(
 
   return schema.Accept(reader);
 }
+
+export { BufferReader, BufferWriter };
