@@ -1,3 +1,5 @@
+import { BitMax } from "./utils.ts";
+
 function* GetBits(data: Iterable<number>): Generator<number> {
   for (const byte of data) for (let i = 0; i < 8; i++) yield (byte >> i) & 1;
 }
@@ -30,14 +32,10 @@ export class BufferReader {
 export class BufferWriter {
   #data: Array<number> = [];
 
-  #bit_max(bits: number) {
-    return Math.pow(2, bits);
-  }
-
   Write(bits: number, value: number) {
-    if (value > this.#bit_max(bits) || value < 0 || value % 1 !== 0)
+    if (value > BitMax(bits) || value < 0 || value % 1 !== 0)
       throw new Error(
-        `Values must be an integer between 0 and the bit max. Maximum is ${this.#bit_max(
+        `Values must be an integer between 0 and the bit max. Maximum is ${BitMax(
           bits
         )} and the value is ${value}`
       );

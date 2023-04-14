@@ -26,6 +26,11 @@ function Perform<TSchema>(schema: ISerialiseable<TSchema>, input: TSchema) {
 Deno.test("Performs a basic string", Perform(new ASCII(), "Hello world"));
 
 Deno.test(
+  "Performs a UTF-8 string",
+  Perform(new UTF8(), "Basic Test 私はパールづそ")
+);
+
+Deno.test(
   "Performs a complex struct",
   Perform(
     new Struct({
